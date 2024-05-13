@@ -1,0 +1,6 @@
+package ni.inventory.service.config;
+
+@Configuration
+public class LoadDatabase {
+
+}

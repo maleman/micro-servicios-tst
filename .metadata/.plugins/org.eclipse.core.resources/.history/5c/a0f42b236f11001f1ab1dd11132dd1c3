@@ -1,0 +1,69 @@
+package ni.inventory.service.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import ni.inventory.service.entity.Product;
+import ni.inventory.service.repository.ProductRepository;
+
+@RestController
+@RequestMapping("/product")
+public class ProductController {
+
+	@Autowired
+	private final ProductRepository productRepository;
+
+	public ProductController(ProductRepository productRepository) {
+		super();
+		this.productRepository = productRepository;
+	}
+
+	@GetMapping("/")
+	public ResponseEntity<List<Product>> getAll() {
+		List<Product> lst = productRepository.findAll();
+		if (lst == null || lst.isEmpty())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(lst);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Product> getOrganizationByID(@PathVariable Long id) {
+		var prd = productRepository.findById(id).orElse(null);
+		if (prd == null)
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(prd);
+	}
+
+	@PostMapping("/add")
+	public ResponseEntity<Product> addOrganization(@RequestBody Product  prd) {
+		return ResponseEntity.ok(productRepository.save(prd));
+	}
+
+	@PutMapping("/edit/{id}")
+	public ResponseEntity<Product> editOrganization(@RequestBody Product newPrd, @PathVariable Long id){
+		var prd =  productRepository.findById(id).orElse(null);
+				
+				if (prd == null)
+					return ResponseEntity.notFound().build();
+			
+				prd.setName(newPrd.getName());
+				prd.setDescription(newPrd.getDescription());
+				prd.setCode(newPrd.getCode());
+				prd.setBrandName(newPrd.getBrandName());
+				prd.setProductCategory(newPrd.getProductCategory());
+				
+				newPrd = productRepository.save(prd);
+				return ResponseEntity.ok(newPrd);
+	}
+}

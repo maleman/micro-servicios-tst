@@ -1,0 +1,19 @@
+package ni.inventory.service.entity.keys;
+
+import java.io.Serializable;
+
+import jakarta.persistence.Embeddable;
+
+@Embeddable
+public class ProductInventoryId implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+	private Product product;
+	private WahreHouse warehouse;
+
+}

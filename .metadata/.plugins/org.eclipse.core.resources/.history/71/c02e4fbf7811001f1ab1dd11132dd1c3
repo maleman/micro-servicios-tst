@@ -1,0 +1,45 @@
+package ni.inventory.service.controller;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import ni.inventory.service.entity.ProductInventory;
+import ni.inventory.service.entity.Warehouse;
+import ni.inventory.service.repository.ProductInventoryRepository;
+
+@SuppressWarnings("unused")
+@RestController
+@RequestMapping("/inventory")
+public class InventoryController {
+	
+	private final ProductInventoryRepository productInventoryRepository;
+
+	public InventoryController(ProductInventoryRepository productInventoryRepository) {
+		super();
+		this.productInventoryRepository = productInventoryRepository;
+	}
+	
+	
+	@GetMapping("")
+	public ResponseEntity<List<ProductInventory>> getAll() {
+		var lst = productInventoryRepository.findAll();
+		if (lst == null || lst.isEmpty())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(lst);
+	}
+	
+	
+	@GetMapping("/wharehouse/{wharehouse_id}")
+	public ResponseEntity<List<ProductInventory>> getByWareHouse(@PathVariable Long wharehouse_id) {
+		var lst = productInventoryRepository.findAll();
+		if (lst == null || lst.isEmpty())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(lst);
+	}
+}

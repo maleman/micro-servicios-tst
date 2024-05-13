@@ -1,0 +1,13 @@
+package ni.inventory.service.repository;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import ni.inventory.service.entity.ProductInventory;
+import ni.inventory.service.entity.keys.ProductInventoryId;
+
+public interface ProductInventoryRepository extends  JpaRepository<ProductInventory, ProductInventoryId>{
+	
+	List<ProductInventory> findByProductInventoryId(ProductInventoryId productInventoryId);
+}

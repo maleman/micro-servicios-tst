@@ -1,0 +1,5 @@
+package ni.inventory.service.entity.keys;
+
+public class ProductInventoryId {
+
+}

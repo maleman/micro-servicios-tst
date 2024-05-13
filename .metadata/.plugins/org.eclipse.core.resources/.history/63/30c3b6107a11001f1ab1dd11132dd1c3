@@ -1,0 +1,73 @@
+package ni.inventory.service.controller;
+
+import java.util.List;
+
+import org.springframework.data.domain.Example;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import ni.inventory.service.entity.ProductInventory;
+import ni.inventory.service.entity.Warehouse;
+import ni.inventory.service.entity.keys.ProductInventoryId;
+import ni.inventory.service.repository.ProductInventoryRepository;
+
+@SuppressWarnings("unused")
+@RestController
+@RequestMapping("/inventory")
+public class InventoryController {
+
+	private final ProductInventoryRepository productInventoryRepository;
+
+	public InventoryController(ProductInventoryRepository productInventoryRepository) {
+		super();
+		this.productInventoryRepository = productInventoryRepository;
+	}
+
+	@GetMapping("")
+	public ResponseEntity<List<ProductInventory>> getAll() {
+		var lst = productInventoryRepository.findAll();
+		if (lst == null || lst.isEmpty())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(lst);
+	}
+
+	@GetMapping("/wharehouse/{wharehouse_id}")
+	public ResponseEntity<List<ProductInventory>> getByWareHouse(@PathVariable Long wharehouse_id) {
+		var key = new ProductInventoryId();
+		key.setWarehouseId(wharehouse_id);
+		key.setProductId(null);
+
+		var productInventoryExample = new ProductInventory();
+		productInventoryExample.setId(key);
+
+		var lst = productInventoryRepository.findAll(Example.of(productInventoryExample));
+
+		if (lst == null)
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(lst);
+	}
+
+	@GetMapping("/wharehouse_and_product/{wharehouse_id}/{product_id}")
+	public ResponseEntity<List<ProductInventory>> getByWareHouseAndProduct(@PathVariable Long wharehouse_id,
+			@PathVariable Long product_id) {
+		var key = new ProductInventoryId();
+		key.setWarehouseId(wharehouse_id);
+		key.setProductId(product_id);
+
+		var pinv = new ProductInventory();
+		pinv.setId(key);
+
+		var lst = productInventoryRepository.findAll(Example.of(pinv));
+
+		if (lst == null)
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(lst);
+	}
+
+}

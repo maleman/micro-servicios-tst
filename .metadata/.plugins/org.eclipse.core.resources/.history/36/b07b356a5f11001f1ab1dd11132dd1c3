@@ -1,0 +1,32 @@
+package ni.inventory.service.entity.keys;
+
+import java.io.Serializable;
+
+import jakarta.persistence.Embeddable;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import ni.inventory.service.entity.Product;
+import ni.inventory.service.entity.Warehouse;
+
+@Embeddable
+@Getter
+@Setter
+@EqualsAndHashCode
+public class ProductInventoryId implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private Product product;
+	private Warehouse warehouse;
+
+	public ProductInventoryId(Product product, Warehouse warehouse) {
+		super();
+		this.product = product;
+		this.warehouse = warehouse;
+	}
+
+}

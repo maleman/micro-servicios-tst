@@ -1,0 +1,71 @@
+package ni.inventory.service.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import ni.inventory.service.entity.Organization;
+import ni.inventory.service.entity.Warehouse;
+import ni.inventory.service.repository.OrganizationRepository;
+import ni.inventory.service.repository.WarehouseRepository;
+
+@RestController
+@RequestMapping("/warehouse")
+public class WareHouseController {
+	
+	@Autowired private final WarehouseRepository warehouseRepository;
+	@Autowired private final OrganizationRepository organizationRepository;
+	public WareHouseController(WarehouseRepository warehouseRepository, OrganizationRepository organizationRepository) {
+		super();
+		this.warehouseRepository = warehouseRepository;
+		this.organizationRepository = organizationRepository;
+	}
+	
+	@GetMapping("")
+	public ResponseEntity<List<Warehouse>> getAll() {
+		var lst = warehouseRepository.findAll();
+		if (lst == null || lst.isEmpty())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(lst);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Warehouse> getOrganizationByID(@PathVariable Long id) {
+		var org = warehouseRepository.findById(id).orElse(null);
+		if (org == null)
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(org);
+	}
+
+	@PostMapping("/add")
+	public ResponseEntity<Warehouse> addOrganization(@RequestBody Warehouse org) {
+		return ResponseEntity.ok(warehouseRepository.save(org));
+	}
+
+	@PutMapping("/edit/{id}")
+	public ResponseEntity<Warehouse> editOrganization(@RequestBody Warehouse newOrg, @PathVariable Long id){
+		var org =  warehouseRepository
+				.findById(id).orElse(null);
+				
+				if (org == null)
+					return ResponseEntity.notFound().build();
+			
+				org.setName(newOrg.getName());
+				org.setDescription(newOrg.getDescription());
+				org.setCode(newOrg.getCode());
+				
+				newOrg = warehouseRepository.save(org);
+				return ResponseEntity.ok(newOrg);
+	}
+	
+}

@@ -1,0 +1,5 @@
+package ni.inventory.service.repository;
+
+public interface WarehouseRepository {
+
+}

@@ -1,0 +1,24 @@
+package ni.inventory.service.config;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import ni.inventory.service.entity.Organization;
+import ni.inventory.service.repository.OrganizationRepository;
+
+@Configuration
+public class LoadDatabase {
+
+	@Bean
+	CommandLineRunner initDatabase(OrganizationRepository organizationRepository,  ProductRepository productRepository) {
+		
+		return args ->{
+			//Organization
+			organizationRepository.save(new Organization( "West Store", "W0001", "West Store"));
+			organizationRepository.save(new Organization( "North West Store", "NW0002", "North West Store"));
+			
+			//Products
+		};
+	}
+}

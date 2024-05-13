@@ -1,0 +1,16 @@
+package ni.inventory.service.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+@Entity
+@Data
+@EqualsAndHashCode
+@ToString
+@Table(name = "organization")
+public class ProductInventory {
+
+}

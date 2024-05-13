@@ -1,0 +1,24 @@
+package ni.inventory.service.entity;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import ni.inventory.service.entity.keys.ProductInventoryId;
+
+@Entity
+@Data
+@EqualsAndHashCode
+@ToString
+@Table(name = "organization")
+public class ProductInventory {
+	@EmbeddedId
+	ProductInventoryId id;
+}

@@ -1,0 +1,105 @@
+package ni.inventory.service.config;
+
+import java.math.BigDecimal;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import ni.inventory.service.entity.Organization;
+import ni.inventory.service.entity.Product;
+import ni.inventory.service.entity.ProductCategory;
+import ni.inventory.service.entity.ProductInventory;
+import ni.inventory.service.entity.Warehouse;
+import ni.inventory.service.entity.keys.ProductInventoryId;
+import ni.inventory.service.repository.OrganizationRepository;
+import ni.inventory.service.repository.ProductCategoryRepository;
+import ni.inventory.service.repository.ProductInventoryRepository;
+import ni.inventory.service.repository.ProductRepository;
+import ni.inventory.service.repository.WarehouseRepository;
+
+@Configuration
+public class LoadDatabase {
+
+	@Bean
+	CommandLineRunner initDatabase(OrganizationRepository organizationRepository, ProductRepository productRepository,
+			ProductCategoryRepository productCategoryRepository, WarehouseRepository warehouseRepository,
+			ProductInventoryRepository productInventoryRepository) {
+
+		return args -> {
+			// Organization
+			Organization ws = new Organization("West Store", "W0001", "West Store", true);
+			Organization nws = new Organization("North West Store", "NW0002", "North West Store", true);
+
+			ws = organizationRepository.save(ws);
+			nws = organizationRepository.save(nws);
+
+			// Warehouse
+			Warehouse w1 = warehouseRepository
+					.save(new Warehouse("West Store Warehouse", "WH-WS001", "West Store Warehouse", ws));
+			Warehouse w2 = warehouseRepository
+					.save(new Warehouse("West TECH STUDIO", "WH-WS002", "West Store Warehouse 2", ws));
+			Warehouse w3 = warehouseRepository
+					.save(new Warehouse("North West Store Warehouse", "WH-NWS01", "North West Store Warehouse", nws));
+			Warehouse w4 = warehouseRepository
+					.save(new Warehouse("North West TECH STUDIO", "WH-NWS02", "North West TECH STUDIO", nws));
+
+			// Products Category
+			ProductCategory smartphone = new ProductCategory("Smartphone", "0001", "Smartphone");
+			ProductCategory tablet = new ProductCategory("Tablet", "0002", "Tablet");
+			ProductCategory noteBook = new ProductCategory("Notebook", "0003", "Notebook");
+
+			smartphone = productCategoryRepository.save(smartphone);
+			tablet = productCategoryRepository.save(tablet);
+			noteBook = productCategoryRepository.save(noteBook);
+
+			// Products
+			Product p1 = productRepository.save(
+					new Product("Samsung Galaxy A21", "A21", "Samsung Galaxy A21 SmartPhone", "Samsung", smartphone));
+			Product p2 = productRepository.save(
+					new Product("Samsung Galaxy A22", "A22", "Samsung Galaxy A22 SmartPhone", "Samsung", smartphone));
+			Product p3 = productRepository.save(
+					new Product("Samsung Galaxy S21", "S21", "Samsung Galaxy S21 SmartPhone", "Samsung", smartphone));
+			Product p4 = productRepository.save(
+					new Product("Samsung Galaxy S22", "S22", "Samsung Galaxy S22 SmartPhone", "Samsung", smartphone));
+			Product p5 = productRepository.save(new Product("Samsung Notebook 9 PRO", "Notebook 9 PRO",
+					"Samsung Notebook 9 PRO", "Samsung", noteBook));
+			Product p6 = productRepository.save(new Product("Samsung Notebook 10 PRO", "Notebook 10 PRO",
+					"Samsung Notebook 10 PRO", "Samsung", noteBook));
+			Product p7 = productRepository
+					.save(new Product("Ipad 9 Pro", "Ipad 9 Pro", "Ipad 9 Pro", "Apple", tablet));
+			Product p8 = productRepository
+					.save(new Product("Mackbook pro", "Mackbook pro", "Mackbook pro", "Apple", noteBook));
+
+			// Inventory
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p1.getId(), w1.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p2.getId(), w1.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p3.getId(), w1.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p4.getId(), w1.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p5.getId(), w1.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p6.getId(), w1.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p7.getId(), w1.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p8.getId(), w1.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p5.getId(), w2.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p6.getId(), w2.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p7.getId(), w2.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p8.getId(), w2.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p1.getId(), w3.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p2.getId(), w3.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p3.getId(), w3.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p4.getId(), w3.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p5.getId(), w3.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p6.getId(), w3.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p7.getId(), w3.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p8.getId(), w3.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p5.getId(), w4.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p6.getId(), w4.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p7.getId(), w4.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			productInventoryRepository.save(new ProductInventory(new ProductInventoryId(p8.getId(), w4.getId()), new BigDecimal("0.00"), new BigDecimal("100")));
+			
+		};
+	}
+}

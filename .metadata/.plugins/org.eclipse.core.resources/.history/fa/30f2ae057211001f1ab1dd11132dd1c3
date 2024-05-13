@@ -1,0 +1,120 @@
+package ni.inventory.service.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import ni.inventory.service.entity.Product;
+import ni.inventory.service.entity.ProductCategory;
+import ni.inventory.service.repository.ProductCategoryRepository;
+import ni.inventory.service.repository.ProductRepository;
+
+@RestController
+@RequestMapping("/product")
+public class ProductController {
+
+	@Autowired
+	private final ProductRepository productRepository;
+	private final ProductCategoryRepository productCategoryRepository;
+
+	public ProductController(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository) {
+		super();
+		this.productRepository = productRepository;
+		this.productCategoryRepository = productCategoryRepository;
+	}
+
+	@GetMapping("/")
+	public ResponseEntity<List<Product>> getAll() {
+		List<Product> lst = productRepository.findAll();
+		if (lst == null || lst.isEmpty())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(lst);
+	}
+
+	@GetMapping("/{Category_id}")
+	public ResponseEntity<List<Product>> getByCategory(@PathVariable Long Category_id) {
+		var productCategory = productCategoryRepository.findById(Category_id).orElse(null);
+		if (productCategory == null)
+			return ResponseEntity.notFound().build();
+		
+		List<Product> lst = productRepository.findByProductCategory(productCategory);
+		if (lst == null || lst.isEmpty())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(lst);
+	}
+	
+	
+	@GetMapping("/categories")
+	public ResponseEntity<List<ProductCategory>> getAllCategories() {
+		List<ProductCategory> lst = productCategoryRepository.findAll();
+		if (lst == null || lst.isEmpty())
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(lst);
+	}
+
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Product> getProductByID(@PathVariable Long id) {
+		var prd = productRepository.findById(id).orElse(null);
+		if (prd == null)
+			return ResponseEntity.notFound().build();
+
+		return ResponseEntity.ok(prd);
+	}
+
+	@PostMapping("/add")
+	public ResponseEntity<Product> addProduct(@RequestBody Product prd) {
+		return ResponseEntity.ok(productRepository.save(prd));
+	}
+	
+	@PostMapping("/category/add")
+	public ResponseEntity<ProductCategory> addCategory(@RequestBody ProductCategory prd) {
+		return ResponseEntity.ok(productCategoryRepository.save(prd));
+	}
+
+
+	@PutMapping("/edit/{id}")
+	public ResponseEntity<Product> editProduct(@RequestBody Product newPrd, @PathVariable Long id) {
+		var prd = productRepository.findById(id).orElse(null);
+
+		if (prd == null)
+			return ResponseEntity.notFound().build();
+
+		prd.setName(newPrd.getName());
+		prd.setDescription(newPrd.getDescription());
+		prd.setCode(newPrd.getCode());
+		prd.setBrandName(newPrd.getBrandName());
+		prd.setProductCategory(newPrd.getProductCategory());
+
+		newPrd = productRepository.save(prd);
+		return ResponseEntity.ok(newPrd);
+	}
+	
+	@PutMapping("/category/edit/{id}")
+	public ResponseEntity<Product> editCategory(@RequestBody ProductCategory newPrd, @PathVariable Long id) {
+		var prd = productRepository.findById(id).orElse(null);
+
+		if (prd == null)
+			return ResponseEntity.notFound().build();
+
+		prd.setName(newPrd.getName());
+		prd.setDescription(newPrd.getDescription());
+		prd.setCode(newPrd.getCode());
+		prd.setBrandName(newPrd.getBrandName());
+		prd.setProductCategory(newPrd.getProductCategory());
+
+		newPrd = productRepository.save(prd);
+		return ResponseEntity.ok(newPrd);
+	}
+}
